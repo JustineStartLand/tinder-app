@@ -1,0 +1,21 @@
+{
+  "name": "tinder-app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "ts-node-dev backend/server.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JustineLuys/tinder-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JustineLuys/tinder-app/issues"
+  },
+  "homepage": "https://github.com/JustineLuys/tinder-app#readme",
+  "description": ""
+}
