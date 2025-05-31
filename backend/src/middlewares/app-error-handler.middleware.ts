@@ -1,10 +1,12 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, Response } from 'express'
 
-import { ErrorResponse } from "../lib/classes/error-response.class";
+import { ErrorResponse } from '../lib/classes/error-response.class'
 import {
   INTERNAL_SERVER_ERROR_CODE,
   NOT_FOUND_ERROR_CODE,
-} from "../lib/constants/statusCodes";
+  UNAUTHORIZED_ERROR_CODE,
+} from '../lib/constants/statusCodes'
+import { JsonWebTokenError } from 'jsonwebtoken'
 
 // Main App Error handler
 export const appErrorHandler = (
@@ -14,20 +16,20 @@ export const appErrorHandler = (
   next: NextFunction
 ) => {
   // Initially, err is set to unknown and we need to validate it first
-  console.error(err);
+  console.error(err)
   if (
-    typeof err === "object" &&
+    typeof err === 'object' &&
     err !== null &&
-    "name" in err &&
-    err.name === "CastError"
+    'name' in err &&
+    err.name === 'CastError'
   ) {
     // If it's CastError from Mongo DB, most likely the client provided the wrong ID Format
-    const castErr = err as Record<string, any>;
+    const castErr = err as Record<string, any>
     // Return Resource not found to be more broad
     res.status(NOT_FOUND_ERROR_CODE).json({
       success: false,
       message: `Resource not found with id ${castErr.value}`,
-    });
+    })
   }
 
   // Server Error Response
@@ -35,7 +37,14 @@ export const appErrorHandler = (
   if (err instanceof ErrorResponse) {
     res.status(err.statusCode || INTERNAL_SERVER_ERROR_CODE).json({
       success: false,
-      message: err.message || "Internal server error occurred",
-    });
+      message: err.message || 'Internal server error occurred',
+    })
   }
-};
+
+  if (err instanceof JsonWebTokenError) {
+    res.status(UNAUTHORIZED_ERROR_CODE).json({
+      success: false,
+      message: 'Not authorized - Invalid Token',
+    })
+  }
+}
