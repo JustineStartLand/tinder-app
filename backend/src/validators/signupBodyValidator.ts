@@ -1,36 +1,45 @@
-import { body } from "express-validator";
+import { body } from 'express-validator'
 
 const validateSignupBody = [
-  body("name").trim().notEmpty().withMessage("Name is required").bail(),
+  body('name').trim().notEmpty().withMessage('Name is required').bail(),
 
-  body("email")
+  body('email')
     .trim()
     .notEmpty()
-    .withMessage("Email is required")
+    .withMessage('Email is required')
     .bail()
     .isEmail()
-    .withMessage("Invalid email format")
+    .withMessage('Invalid email format')
     .bail(),
 
-  body("password").trim().notEmpty().withMessage("Password is required").bail(),
-
-  body("age")
+  body('password')
     .trim()
     .notEmpty()
-    .withMessage("Age is required")
+    .withMessage('Password is required')
+    .bail()
+    .isLength({
+      min: 8,
+    })
+    .withMessage('Password must be at least 8 characters long')
+    .bail(),
+
+  body('age')
+    .trim()
+    .notEmpty()
+    .withMessage('Age is required')
     .bail()
     .isFloat({
       min: 18,
     })
-    .withMessage("You must be at least 18 years old to sign up"),
+    .withMessage('You must be at least 18 years old to sign up'),
 
-  body("gender").trim().notEmpty().withMessage("Gender is required").bail(),
+  body('gender').trim().notEmpty().withMessage('Gender is required').bail(),
 
-  body("genderPreference")
+  body('genderPreference')
     .trim()
     .notEmpty()
-    .withMessage("Gender preferenceis required")
+    .withMessage('Gender preferenceis required')
     .bail(),
-];
+]
 
-export default validateSignupBody;
+export default validateSignupBody

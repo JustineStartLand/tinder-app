@@ -36,7 +36,7 @@ export const updateProfile = [
         }
       }
 
-      const updatedUser = await updateUserById(req.user.id, updatedData)
+      const updatedUser = await updateUserById(req.user!.id, updatedData)
 
       res.status(STATUS_OK_SUCCESS_CODE).json({
         success: true,

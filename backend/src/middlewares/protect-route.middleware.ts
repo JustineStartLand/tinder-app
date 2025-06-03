@@ -8,6 +8,7 @@ import { asyncHandler } from '../lib/handlers/async-handler'
 import { createErrorClass } from '../lib/utils'
 import jwt, { JwtPayload } from 'jsonwebtoken'
 export const protectRoute = asyncHandler(async (req, res, next) => {
+  console.log('hell')
   const token = req.cookies.jwt
 
   if (!token) {
@@ -35,4 +36,5 @@ export const protectRoute = asyncHandler(async (req, res, next) => {
     return next(createErrorClass('User not found', NOT_FOUND_ERROR_CODE))
   }
   req.user = currentUser
+  next()
 })

@@ -9,6 +9,7 @@ class Config {
   CLOUDINARY_API_KEY: string
   CLOUDINARY_API_SECRET: string
   CLOUDINARY_CLOUD_NAME: string
+  CLIENT_URL: string
   constructor() {
     this.NODE_ENV = process.env.NODE_ENV!
     this.PORT = Number(process.env.PORT!)
@@ -17,6 +18,7 @@ class Config {
     this.CLOUDINARY_API_KEY = process.env.CLOUDINARY_API_KEY!
     this.CLOUDINARY_API_SECRET = process.env.CLOUDINARY_API_SECRET!
     this.CLOUDINARY_CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME!
+    this.CLIENT_URL = process.env.CLIENT_URL!
   }
 }
 

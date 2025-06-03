@@ -39,8 +39,8 @@ export const login = [
           createErrorClass('Invalid email or password', NOT_FOUND_ERROR_CODE)
         )
       }
-      const isPasswordMatch = user.matchPassword(password)
-
+      const isPasswordMatch = await user.matchPassword(password)
+      console.log(isPasswordMatch)
       if (!isPasswordMatch) {
         return next(
           createErrorClass('Invalid email or password', NOT_FOUND_ERROR_CODE)
@@ -72,6 +72,14 @@ export const signup = [
         return next(createErrorClass(errMessage, BAD_REQUEST_ERROR_CODE))
       }
 
+      const user = await findUserByEmail(req.body.email)
+
+      if (user) {
+        return next(
+          createErrorClass('Email already exists', BAD_REQUEST_ERROR_CODE)
+        )
+      }
+
       const newUser = createUserModel(req.body)
       const savedUser = await saveUserToDb(newUser)
 
@@ -80,6 +88,7 @@ export const signup = [
 
       res.status(CREATED_SUCCESS_CODE).json({
         success: true,
+        data: savedUser,
       })
     }
   ),

@@ -12,6 +12,7 @@ import {
 import { Types } from 'mongoose'
 import { findUserById, saveUserToDb } from '../db/services/user.service'
 import { TUserDocument } from '../types/documents/TUserDocument'
+import { getConnectedUsers, getIO } from '../connections/socket'
 
 export const swipeRight = asyncHandler(
   async (
@@ -34,26 +35,48 @@ export const swipeRight = asyncHandler(
       loggedInUser.likes.push(new Types.ObjectId(likedUserId))
       savedUser = await saveUserToDb(loggedInUser)
 
-      const hasOtheruserAlreadyLikedUs = likedUser.likes.some(
-        (id) => id === loggedInUser._id
+      console.log(likedUser.likes)
+      const hasOtherUserAlreadyLikedUs = likedUser.likes.some(
+        (id) => id.toString() === (loggedInUser.id as Types.ObjectId).toString()
       )
-
+      console.log(hasOtherUserAlreadyLikedUs)
       // If the other user already liked us too, it's a match, so let's update the match for both users
-      if (hasOtheruserAlreadyLikedUs) {
+      if (hasOtherUserAlreadyLikedUs) {
         likedUser.matches.push(loggedInUser._id as Types.ObjectId)
         loggedInUser.matches.push(likedUser._id as Types.ObjectId)
-
         let [savedUserPromise, _] = await Promise.all([
           saveUserToDb(loggedInUser),
           saveUserToDb(likedUser),
         ])
         savedUser = savedUserPromise
+        // TODO SEND NOTIFICATION IF IT IS A MATCH => SOCKET.IO
+        const connectedUsers = getConnectedUsers()
+        const likedUserSocketId = connectedUsers.get(likedUser.id)
+        const io = getIO()
+
+        if (likedUserSocketId) {
+          io.to(likedUserSocketId).emit('newMatch', {
+            id: loggedInUser.id,
+            name: loggedInUser.name,
+            image: loggedInUser.image,
+          })
+        }
+        //
+        const loggedInUserSocketId = connectedUsers.get(loggedInUser.id)
+
+        if (loggedInUserSocketId) {
+          io.to(loggedInUserSocketId).emit('newMatch', {
+            id: likedUser.id,
+            name: likedUser.name,
+            image: likedUser.image,
+          })
+        }
       }
       res.status(STATUS_OK_SUCCESS_CODE).json({
         success: true,
         data: savedUser,
       })
-      // TODO SEND NOTIFICATION IF IT IS A MATCH => SOCKET.IO
+      return
     }
 
     res.status(200).json({
@@ -107,7 +130,7 @@ export const displayMatches = asyncHandler(async (req, res, next) => {
   }
   res.status(200).json({
     sucess: true,
-    matches: user.matches,
+    data: user.matches,
   })
 })
 
