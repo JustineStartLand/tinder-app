@@ -96,7 +96,6 @@ const useMatchStore = create<TMatchStore>((set, get) => ({
 
       toast.success('Liked user')
     } catch (e: unknown) {
-      console.log(e)
       toast.error(
         (e instanceof AxiosError && e.response?.data.message) ||
           'Failed to swipe right'

@@ -17,7 +17,6 @@ const Sidebar = () => {
 
   const toggleSidebar = () => setIsOpen(!isOpen)
 
-  console.log(matches)
   return (
     <>
       <div

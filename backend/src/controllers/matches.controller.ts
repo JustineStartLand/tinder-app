@@ -35,11 +35,9 @@ export const swipeRight = asyncHandler(
       loggedInUser.likes.push(new Types.ObjectId(likedUserId))
       savedUser = await saveUserToDb(loggedInUser)
 
-      console.log(likedUser.likes)
       const hasOtherUserAlreadyLikedUs = likedUser.likes.some(
         (id) => id.toString() === (loggedInUser.id as Types.ObjectId).toString()
       )
-      console.log(hasOtherUserAlreadyLikedUs)
       // If the other user already liked us too, it's a match, so let's update the match for both users
       if (hasOtherUserAlreadyLikedUs) {
         likedUser.matches.push(loggedInUser._id as Types.ObjectId)

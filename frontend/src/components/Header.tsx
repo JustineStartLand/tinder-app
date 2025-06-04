@@ -23,7 +23,6 @@ const Header = () => {
   }, [])
 
   const handleLogout = () => {
-    console.log('hello')
     logout()
     setMobileMenuOpen(false)
   }

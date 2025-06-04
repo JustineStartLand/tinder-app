@@ -8,7 +8,6 @@ import { asyncHandler } from '../lib/handlers/async-handler'
 import { createErrorClass } from '../lib/utils'
 import jwt, { JwtPayload } from 'jsonwebtoken'
 export const protectRoute = asyncHandler(async (req, res, next) => {
-  console.log('hell')
   const token = req.cookies.jwt
 
   if (!token) {

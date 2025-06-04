@@ -15,6 +15,7 @@ import {
 import { findUserById } from '../db/services/user.service'
 import { createErrorClass } from '../lib/utils'
 import { Types } from 'mongoose'
+import { getConnectedUsers, getIO } from '../connections/socket'
 
 export const sendMessage = asyncHandler(
   async (
@@ -31,6 +32,15 @@ export const sendMessage = asyncHandler(
     }
     const newMessage = createMessageModel(messageObject)
     const savedMessage = await saveMessageToDb(newMessage)
+
+    const io = getIO()
+    const connectedUsers = getConnectedUsers()
+    const receiverSocketId = connectedUsers.get(receiverId)
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit('newMessage', {
+        message: newMessage,
+      })
+    }
     res.status(CREATED_SUCCESS_CODE).json({
       success: true,
       data: savedMessage,

@@ -13,7 +13,6 @@ const useUserStore = create<TUserStore>((set) => ({
   isUpdatingProfile: false,
 
   updateProfile: async (data: TUpdateUserEntry) => {
-    console.log('update profile')
     set({ isUpdatingProfile: true })
 
     try {

@@ -40,7 +40,6 @@ export const login = [
         )
       }
       const isPasswordMatch = await user.matchPassword(password)
-      console.log(isPasswordMatch)
       if (!isPasswordMatch) {
         return next(
           createErrorClass('Invalid email or password', NOT_FOUND_ERROR_CODE)

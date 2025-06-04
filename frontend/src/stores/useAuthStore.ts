@@ -16,7 +16,6 @@ const useAuthStore = create<TAuthStore>((set) => ({
     try {
       set({ isLoggingIn: true })
       const res = await axiosInstance.post('/auth/login', loginData)
-      console.log(res.data.data)
       if (res.status === 200) {
         set({ authUser: res.data.data })
         initializeSocket(res.data.data.id)
@@ -36,7 +35,6 @@ const useAuthStore = create<TAuthStore>((set) => ({
     try {
       set({ isSigningUp: true })
       const res = await axiosInstance.post('/auth/signup', signUpData)
-      console.log(res.data.data)
       set({
         authUser: res.data.data,
       })

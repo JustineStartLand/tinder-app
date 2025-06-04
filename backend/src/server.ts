@@ -7,8 +7,10 @@ import { appErrorHandler } from './middlewares/app-error-handler.middleware'
 import express from 'express'
 import { createServer } from 'http'
 import { initializeSocket } from './connections/socket'
+import path from 'path'
 
 const initApp = () => {
+  const __dirname = path.resolve()
   const app = express()
 
   const httpServer = createServer(app)
@@ -17,6 +19,12 @@ const initApp = () => {
   initializeSocket(httpServer)
   app.use('/api', apiRouter)
 
+  if (config.NODE_ENV === 'production') {
+    app.use(express.static(path.join(__dirname, '/frontend/dist')))
+    app.get('/*splat', (req, res) => {
+      res.sendFile(path.resolve(__dirname, 'frontend', 'dist', 'index.html'))
+    })
+  }
   app.use(appErrorHandler)
 
   httpServer.listen(PORT, () => {

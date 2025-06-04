@@ -29,11 +29,9 @@ export const initializeSocket = (
   })
 
   io.on('connection', (socket: ExtendedSocket) => {
-    console.log(`User connected with socket id: ${socket.id}`)
     connectedUsers.set(socket.userId, socket.id)
 
     socket.on('disconnect', () => {
-      console.log(`User disconnected with socket id: ${socket.id}`)
       connectedUsers.delete(socket.userId)
     })
   })

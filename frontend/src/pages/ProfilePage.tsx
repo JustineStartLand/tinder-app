@@ -68,7 +68,6 @@ const ProfilePage = () => {
     const fileReader = new FileReader()
     fileReader.onload = () => {
       const result = fileReader.result
-      console.log(result)
       setUserData((prev) => ({
         ...prev,
         image: result as string,

@@ -4,7 +4,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "ts-node-dev backend/server.ts"
+    "dev": "ts-node-dev backend/server.ts",
+    "build": "npm install --prefix backend && npm install --legacy-peer-deps --prefix frontend && npm run build --prefix frontend",
+    "start": "npm start --prefix backend"
   },
   "repository": {
     "type": "git",
@@ -17,5 +19,8 @@
     "url": "https://github.com/JustineLuys/tinder-app/issues"
   },
   "homepage": "https://github.com/JustineLuys/tinder-app#readme",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "react-tinder-card": "^1.6.4"
+  }
 }
