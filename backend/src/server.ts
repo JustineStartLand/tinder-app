@@ -18,11 +18,12 @@ const initApp = () => {
   const PORT = config.PORT
   initializeSocket(httpServer)
   app.use('/api', apiRouter)
+  console.log(`Dirname: ${__dirname}`)
 
   if (config.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, '/frontend/dist')))
+    app.use(express.static(path.join(__dirname, '../frontend/dist')))
     app.get('/*splat', (req, res) => {
-      res.sendFile(path.resolve(__dirname, 'frontend', 'dist', 'index.html'))
+      res.sendFile(path.resolve(__dirname, '../frontend', 'dist', 'index.html'))
     })
   }
   app.use(appErrorHandler)
