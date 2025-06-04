@@ -32,7 +32,7 @@ const useMessageStore = create<TMessageStoreState>((set) => ({
       messages: [...state.messages, newMessage],
     }))
     try {
-      const res = await axiosInstance.post('/messages/send', {
+      await axiosInstance.post('/messages/send', {
         receiverId,
         content,
       })
